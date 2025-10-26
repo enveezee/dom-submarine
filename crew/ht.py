@@ -10,24 +10,42 @@ class HullTech:
     - ClassDegreaser: Cleans bloated class attributes
     """
 
-    def __init__(self):
+    def __init__(self, config=None):
         self.noise_filter = NoiseFilter()
         self.svg_stripper = SVGStripper()
         self.class_degreaser = ClassDegreaser()
+        self.config = config or {
+            "strip_svg": True,
+            "filter_noise": True,
+            "degrease_classes": True,
+            "preserve_test_hooks": True,
+            "aggressive_mode": False
+        }
+        self.log = {
+            "removed": [],
+            "preserved": [],
+            "cleaned": {}
+        }
+
+    def update_config(self, new_config):
+        self.config.update(new_config)
 
     def sanitize(self, node_id, tag, attrs):
-        """Run all sanitation tools on a node. Returns cleaned attrs or None if node should be removed."""
-        if self.noise_filter.filter(node_id, tag, attrs):
+        """Run sanitation tools based on current config."""
+        if self.config["filter_noise"] and self.noise_filter.filter(node_id, tag, attrs):
+            self.log["removed"].append((node_id, "noise"))
             return None
-        if self.svg_stripper.strip(node_id, tag):
+
+        if self.config["strip_svg"] and self.svg_stripper.strip(node_id, tag):
+            self.log["removed"].append((node_id, "svg"))
             return None
-        cleaned_attrs = self.class_degreaser.degrease(node_id, attrs)
+
+        cleaned_attrs = attrs
+        if self.config["degrease_classes"]:
+            cleaned_attrs = self.class_degreaser.degrease(node_id, attrs)
+            self.log["cleaned"][node_id] = cleaned_attrs
+
         return cleaned_attrs
 
     def report(self):
-        """Returns full hull maintenance report."""
-        return {
-            "removed_noise": self.noise_filter.report(),
-            "stripped_svg": self.svg_stripper.report(),
-            "cleaned_classes": self.class_degreaser.report()
-        }
+        return self.log
