@@ -1,31 +1,33 @@
-class BufferManager:
-    def __init__(self, max_size=100):
-        self.buffer = []
-        self.max_size = max_size
+from tools.cob.buffer_tool import BufferTool
 
-    def push(self, tag, attrs, data=None):
-        """Add a new tag or data node to the buffer."""
-        self.buffer.append({
-            'tag': tag,
-            'attrs': dict(attrs),
-            'data': data
-        })
-        if len(self.buffer) > self.max_size:
-            self.buffer.pop(0)
+class ChiefOfBuffer:
+    """
+    Officer responsible for managing DOM buffers.
+    Coordinates BufferTool and responds to flush directives.
+    """
 
-    def flush(self):
-        """Flush the buffer and return its contents."""
-        flushed = self.buffer[:]
-        self.buffer.clear()
-        return flushed
+    def __init__(self, config=None):
+        self.config = config or {
+            "max_size": 100,
+            "flush_rules": [
+                {"tag": "div", "match": "message"},
+                {"tag": "section", "match": "payload"}
+            ]
+        }
+        self.buffer_tool = BufferTool(
+            max_size=self.config["max_size"],
+            flush_rules=self.config["flush_rules"]
+        )
+
+    def receive(self, tag, attrs, data=None):
+        self.buffer_tool.push(tag, attrs, data)
+        if self.buffer_tool.is_flush_trigger(tag, data):
+            return self.buffer_tool.flush()
+        return None
 
     def peek(self, depth=5):
-        """Peek at the last N items in the buffer."""
-        return self.buffer[-depth:]
+        return self.buffer_tool.peek(depth)
 
-    def is_flush_trigger(self, tag, data):
-        """Determine if this tag/data signals a flush."""
-        # Example: flush on closing a <div> with class 'message'
-        if tag == 'div' and data and 'message' in data:
-            return True
-        return False
+    def report(self):
+        return self.buffer_tool.report()
+
