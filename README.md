@@ -25,22 +25,80 @@ The universality of disciplined systems thinking can be applied in cross-domain 
 
 ---
 
-## Framework Structure
+## 📁 DOM Submarine Project Structure
 
-The project is organized around a **crew directory**, where each file represents a submariner role (using Navy acronyms) and contains the tools and duties that role would perform.
+This layout reflects the operational doctrine of DOM Submarine. Each module is mapped to naval roles and mission-critical responsibilities, enabling modular clarity, survivability, and coalition-grade adaptability.
 
-### 🧭 Crew Manifest (`crew/`)
+### Root
+- `README.md` — Project overview and tactical philosophy
+- `LICENSE` — Open-source license (MIT)
+- `setup.py` — Package setup and entry point
 
-| File        | Role                          | Responsibilities                                  |
-|-------------|-------------------------------|---------------------------------------------------|
-| `cob.py`    | Chief of Buffer               | Manages rolling buffer and flush logic            |
-| `sts.py`    | Sonar Technician Submarines   | Tracks tag depth, semantic zones, and echo logic  |
-| `ft.py`     | Fire Control Technician       | Scores nodes and locks onto semantic targets      |
-| `ht.py`     | Hull Maintenance Technician   | Filters noise, strips SVGs and utility classes    |
-| `xo.py`     | Executive Officer             | Coordinates parser operations                     |
-| `co.py`     | Commanding Officer            | Orchestrates mission and crew                     |
+### core/
+- `submarine.py` — Main vessel class coordinating crew and mission execution
+- `mission_profile.py` — Declarative mission schemas for repeatable deployments
+- `naval_command.py` — SECNAV/OPNAV orchestration logic
+- `utils.py` — Shared utilities (e.g. ID generation, logging)
 
-Each officer may operate multiple tools (classes), and each tool is designed to reflect the real-world duties of its namesake.
+### crew/ (Officer Modules)
+- `co.py` — Commanding Officer: sets mission config
+- `xo.py` — Executive Officer: dispatches directives
+- `cob.py` — Chief of Buffer: manages rolling buffer and flush logic
+- `ft.py` — Fire Control Officer: scores nodes and extracts payloads
+- `ht.py` — Hull Maintenance Technician: sanitizes DOM structure
+- `sts.py` — Sonar Technician: tracks depth and semantic zones
+- `nav.py` — Navigator: tracks DOM traversal path
+- `eng.py` — Engineering Officer: logs tool failures and diagnostics
+- `intel.py` — Intelligence Officer: analyzes extracted payloads
+- `ops.py` — Operations Officer: logs mission phases and checkpoints
+
+### tools/ (Officer Toolkits)
+- `sonar/` — Depth tracking, semantic scanning, echo logging
+- `firecontrol/` — Node scoring, locking, payload extraction
+- `hulltech/` — Noise filtering, SVG stripping, class degreasing
+- `cob/` — Buffer management and flush rules
+- `eng/` — Diagnostics and error logging
+- `intel/` — Payload analysis
+- `nav/` — Path tracking
+- `xo/` — Directive dispatch
+- `ops/` — Phase logging
+
+### parser/
+- `pilot.py` — HTMLParser-based DOMPilot
+- `stream.py` — Streaming ingestion protocols
+- `shadow.py` — Shadow DOM support (via Playwright etc.)
+
+### wrappers/ (External Interface Bindings)
+- `playwright/` — Playwright integration
+- `copilot/` — Copilot wrapper
+- `selenium/` — Optional Selenium support
+- `cli/` — Command-line interface
+
+### command/ (LLM/SLM Orchestration)
+- `opnav_agent.py` — Mission audit and config revision
+- `secnav.py` — Strategic deployment manager
+- `generals.py` — Tactical mission launchers
+
+### docs/
+- `mission_manual.md` — Tactical philosophy and deployment overview
+- `crew_manifest.md` — Officer roles and responsibilities
+- `deployment_guide.md` — Setup and usage instructions
+
+### tests/
+- `test_submarine.py` — Vessel coordination tests
+- `test_parser.py` — DOM ingestion tests
+- `test_wrappers.py` — Wrapper integration tests
+
+### examples/
+- `inspect_ai_message.py` — Playwright-fed DOM inspection mission
+- `static_html_mission.py` — Offline HTML parsing demo
+- `drift_detection_demo.py` — DOM drift detection and adaptation
+
+### data/
+- `dom_snapshots/` — Saved DOM states for inspection
+- `payloads/` — Extracted semantic payloads
+- `reports/` — Mission logs and crew reports
+
 
 ---
 
@@ -85,4 +143,3 @@ This project is open-source under the MIT license and mission-driven. Use it, ad
 ## Acknowledgments
 
 Inspired by the operational excellence of the United States Navy and the universality of disciplined systems thinking. We salute the sailors whose protocols guide our parsing.
-
